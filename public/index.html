@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-10">
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold mb-4">To-Do List</h1>
+        
+        <div class="mb-4">
+            <input type="text" id="taskTitle" class="w-full p-2 border rounded" placeholder="Enter task title">
+            <input type="text" id="taskDescription" class="w-full p-2 border rounded mt-2" placeholder="Enter task description">
+            <button onclick="addTask()" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 w-full">Add Task</button>
+        </div>
+        
+        <ul id="taskList" class="space-y-2"></ul>
+    </div>
+
+    <script>
+        const API_URL = window.location.hostname === "todo.local"
+            ? "http://todo.local/tasks"   // When running inside Kubernetes
+            : "http://localhost:3000/tasks";  // When running in Docker (or locally)
+
+
+        async function fetchTasks() {
+            const response = await fetch(API_URL);
+            const tasks = await response.json();
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+            tasks.forEach(task => {
+                taskList.innerHTML += `
+                    <li class="flex justify-between items-center bg-gray-200 p-2 rounded">
+                        <div>
+                            <strong>${task.title}</strong>
+                            <p class="text-sm text-gray-600">${task.description || "No description"}</p>
+                            ${task.completed ? '<span class="text-green-600 font-bold">Completed</span>' : ''}
+                        </div>
+                        <div>
+                            ${!task.completed ? `<button onclick="updateTask('${task.id}')" class="bg-green-500 text-white px-2 py-1 rounded">Complete</button>` : ''}
+                            <button onclick="deleteTask('${task.id}')" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                        </div>
+                    </li>`;
+            });
+        }
+
+        async function addTask() {
+            const title = document.getElementById("taskTitle").value.trim();
+            const description = document.getElementById("taskDescription").value.trim();
+            if (!title) return;
+
+            await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, description: description || "", completed: false })
+            });
+            document.getElementById("taskTitle").value = "";
+            document.getElementById("taskDescription").value = "";
+            fetchTasks();
+        }
+
+        async function updateTask(id) {
+            await fetch(`${API_URL}/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ completed: true })
+            }).then(response => response.json()).then(() => fetchTasks());
+        }
+
+        async function deleteTask(id) {
+            await fetch(`${API_URL}/${id}`, { method: "DELETE" })
+            .then(response => response.json())
+            .then(() => fetchTasks());
+        }
+
+        document.getElementById("taskTitle").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                addTask();
+            }
+        });
+
+        document.getElementById("taskDescription").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                addTask();
+            }
+        });
+
+        fetchTasks();
+    </script>
+</body>
+</html>

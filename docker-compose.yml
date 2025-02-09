@@ -1,0 +1,32 @@
+services:
+  tododb:
+    image: postgres:latest
+    container_name: tododb
+    restart: always
+    environment:
+      POSTGRES_USER: todouser
+      POSTGRES_PASSWORD: todopassword
+      POSTGRES_DB: tododb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  todoapp:
+    build: .
+    container_name: todoapp
+    restart: always
+    depends_on:
+      - tododb
+    environment:
+      DB_HOST: tododb
+      DB_PORT: 5432
+      DB_NAME: tododb
+      DB_USER: todouser
+      DB_PASS: todopassword
+    ports:
+      - "3000:3000"
+      - "8000:8000"
+
+volumes:
+  postgres_data:
