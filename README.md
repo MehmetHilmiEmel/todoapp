@@ -33,10 +33,6 @@ kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.
 # ingress podlarının kontrolü 
 kubectl get pods -n ingress-nginx
 
-# docker imajının alınması ve kind load edilmesi
-docker build -t todo-app:latest .
-kind load docker-image todo-app:latest --name todo-cluster
-
 # deployment
 kubectl apply -f k8s/postgres.yaml
 kubectl apply -f k8s/todoapp.yaml
