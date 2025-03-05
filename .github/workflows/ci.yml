@@ -19,15 +19,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push
+      - name: Build and push multi-arch Docker image
         uses: docker/build-push-action@v6
         with:
           push: true
+          platforms: inux/arm64
           tags: ${{ vars.DOCKERHUB_USERNAME }}/todoapp:latest
 
   deploy:
     runs-on: self-hosted
-    needs: docker  # Bu satır, deploy'un docker job'ı tamamlandıktan sonra başlamasını sağlar.
+    needs: docker
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -36,3 +37,7 @@ jobs:
         run: |
           kubectl apply -f k8s/
           kubectl rollout status deployment/todoapp
+
+      - name: Debug pod if deployment fails
+        if: failure()
+        run: kubectl describe pod -l app=todoapp
