@@ -25,6 +25,9 @@ jobs:
           push: true
           platforms: linux/arm64
           tags: ${{ vars.DOCKERHUB_USERNAME }}/todoapp:latest
+          build-args: |
+            NO_CACHE=true
+          no-cache: true
 
   deploy:
     runs-on: self-hosted
