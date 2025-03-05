@@ -27,6 +27,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted
+    needs: docker  # Bu satır, deploy'un docker job'ı tamamlandıktan sonra başlamasını sağlar.
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
