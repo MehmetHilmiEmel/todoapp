@@ -23,7 +23,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          platforms: inux/arm64
+          platforms: linux/arm64
           tags: ${{ vars.DOCKERHUB_USERNAME }}/todoapp:latest
 
   deploy:
