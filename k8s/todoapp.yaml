@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: todoapp
-          image: hilmiemel/todoapp
+          image: hilmiemel/todoapp:latest
           env:
             - name: DB_HOST
               value: "postgres-service"
