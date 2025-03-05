@@ -26,10 +26,6 @@ jobs:
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/todoapp:latest
 
-on:
-  push:
-    branches:
-      - main
 
 jobs:
   deploy:
