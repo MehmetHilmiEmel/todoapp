@@ -27,6 +27,7 @@ jobs:
 
       - name: Build Docker image with no-cache
         run: |
+          cd ../..
           docker-compose build --no-cache
 
       - name: Build and push multi-arch Docker image
