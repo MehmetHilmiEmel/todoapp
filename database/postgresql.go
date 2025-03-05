@@ -26,9 +26,9 @@ func initialize() *gorm.DB {
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=Europe/Istanbul",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASS"),
-		os.Getenv("DB_NAME"),
+		os.Getenv("POSTGRES_USER"),  // Kubernetes'teki POSTGRES_USER
+		os.Getenv("POSTGRES_PASSWORD"),  // Kubernetes'teki POSTGRES_PASSWORD
+		os.Getenv("POSTGRES_DB"),  // Kubernetes'teki POSTGRES_DB
 	)
 
 	connection, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
