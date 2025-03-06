@@ -21,8 +21,8 @@
 
     <script>
         const API_URL = window.location.hostname === "todo.local"
-            ? "http://10.96.164.212:3000/tasks"   // When running inside Kubernetes
-            : "http://10.96.164.212:3000/tasks";  // When running in Docker (or locally)
+            ? "http://todo.local/tasks"   // When running inside Kubernetes
+            : "http://localhost:3000/tasks";  // When running in Docker (or locally)
 
 
         async function fetchTasks() {
