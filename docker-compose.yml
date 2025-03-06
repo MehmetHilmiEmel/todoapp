@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres
+    container_name: tododb
     restart: always
     environment:
       POSTGRES_USER: todouser
@@ -17,7 +17,7 @@ services:
     container_name: todoapp
     restart: always
     depends_on:
-      - postgres
+      - tododb
     environment:
       DB_HOST: tododb  # Should match the database service name
       DB_PORT: 5432

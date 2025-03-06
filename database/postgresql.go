@@ -23,11 +23,11 @@ func Connection() *gorm.DB {
 
 func initialize() *gorm.DB {
 	// Environment variables
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	user := os.Getenv("DB_USER")          // Ensure this matches your env variables
-	password := os.Getenv("DB_PASSWORD")  // Use DB_PASSWORD instead of DB_PASS
-	dbname := os.Getenv("DB_NAME")
+	host := "10.96.196.199"
+	port := "5432"
+	user := "todouser"         // Ensure this matches your env variables
+	password := "todopassword"  // Use DB_PASSWORD instead of DB_PASS
+	dbname := "tododb"
 
 	// Check if any required environment variable is missing
 	if host == "" || port == "" || user == "" || password == "" || dbname == "" {
