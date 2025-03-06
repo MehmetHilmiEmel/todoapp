@@ -21,7 +21,7 @@
 
     <script>
         const API_URL = window.location.hostname === "todo.local"
-            ? "http://todo.local/tasks"   // When running inside Kubernetes
+            ? "http://10.96.196.199:3000/tasks"   // When running inside Kubernetes
             : "http://localhost:3000/tasks";  // When running in Docker (or locally)
 
 
