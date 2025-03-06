@@ -2,6 +2,8 @@ name: ci
 
 on:
   push:
+    branches:
+      - main  # veya sizin kullandığınız branch adı
 
 jobs:
   docker:
@@ -38,7 +40,15 @@ jobs:
 
       - name: Apply Kubernetes Manifests
         run: |
-          kubectl apply -f k8s/
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+          kubectl patch deployment ingress-nginx-controller -n ingress-nginx --type=json -p '[{"op": "remove", "path": "/spec/template/spec/nodeSelector"}]'
+          kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+          kubectl rollout restart deployment ingress-nginx-controller -n ingress-nginx
+          kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
+          kubectl get pods -n ingress-nginx
+          kubectl apply -f k8s/postgres.yaml
+          kubectl apply -f k8s/todoapp.yaml
+          kubectl apply -f k8s/ingress.yaml
           kubectl rollout status deployment/todoapp
 
       - name: Debug pod if deployment fails
