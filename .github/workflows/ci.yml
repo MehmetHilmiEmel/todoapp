@@ -41,15 +41,6 @@ jobs:
           kubectl apply -f k8s/
           kubectl rollout status deployment/todoapp
 
-      - name: Rollout restart for todoapp deployment
-        run: kubectl rollout restart deployment todoapp
-
-      - name: Port forward service to 8000
-        run: kubectl port-forward service/todoapp-service 8000:8000 &
-        
-      - name: Port forward service to 3000
-        run: kubectl port-forward service/todoapp-service 3000:3000 &
-        
       - name: Debug pod if deployment fails
         if: failure()
         run: kubectl describe pod -l app=todoapp
