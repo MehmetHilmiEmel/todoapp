@@ -22,7 +22,6 @@ spec:
       port: 5432
       targetPort: 5432
 
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,10 +46,6 @@ spec:
               value: "todopassword"
             - name: POSTGRES_DB
               value: "tododb"
-            - name: DB_HOST
-              value: "localhost"  # DB_HOST ortam değişkenini buradan alabilirsiniz
-            - name: DB_PORT
-              value: "5432"  # DB_PORT ortam değişkenini buradan alabilirsiniz
           ports:
             - containerPort: 5432
           volumeMounts:

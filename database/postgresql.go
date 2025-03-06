@@ -22,21 +22,31 @@ func Connection() *gorm.DB {
 }
 
 func initialize() *gorm.DB {
+	// Environment variables
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")          // Ensure this matches your env variables
+	password := os.Getenv("DB_PASSWORD")  // Use DB_PASSWORD instead of DB_PASS
+	dbname := os.Getenv("DB_NAME")
+
+	// Check if any required environment variable is missing
+	if host == "" || port == "" || user == "" || password == "" || dbname == "" {
+		panic("Database environment variables are not set properly!")
+	}
+
+	// Connection string for PostgreSQL
 	dsn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=Europe/Istanbul",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("POSTGRES_USER"),  // Kubernetes'teki POSTGRES_USER
-		os.Getenv("POSTGRES_PASSWORD"),  // Kubernetes'teki POSTGRES_PASSWORD
-		os.Getenv("POSTGRES_DB"),  // Kubernetes'teki POSTGRES_DB
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=Europe/Istanbul",
+		host, port, user, password, dbname,
 	)
 
-	connection, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	// Initialize connection
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
-		return nil
+		panic(fmt.Sprintf("Failed to connect to database: %v", err))
 	}
 
-	return connection
+	return db
 }
