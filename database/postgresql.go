@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"os"
 	"sync"
 
 	"gorm.io/driver/postgres"

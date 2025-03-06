@@ -1,5 +1,5 @@
 services:
-  postgres:
+  tododb:
     image: postgres:latest
     container_name: tododb
     restart: always
