@@ -37,7 +37,7 @@ spec:
         app: postgres
     spec:
       containers:
-        - name: postgres
+        - name: tododb
           image: postgres:latest
           env:
             - name: POSTGRES_USER
